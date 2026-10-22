@@ -144,3 +144,14 @@ input:focus, select:focus, textarea:focus { border-color: #6fc9a5; box-shadow: 0
 .message.assistant .bubble del {
   opacity: 0.7;
 }
+
+
+.footer-creator {
+  color: #a8b8c5;
+  font-size: 12px;
+}
+
+.footer-creator strong {
+  color: #8ce6c5;
+  font-weight: 600;
+}
