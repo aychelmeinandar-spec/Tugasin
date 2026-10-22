@@ -28,6 +28,33 @@
 <section class="view" id="view-learn"><div class="section-intro"><span class="overline">BELAJAR AKTIF</span><h2>Belajar & Kuis</h2><p>Minta penjelasan konsep, contoh sederhana, atau buat kuis dari topik yang sedang dipelajari.</p></div><div class="form-card"><label>Topik yang ingin dipelajari<input id="learnTopic" placeholder="Contoh: algoritma KNN, basis data, jaringan komputer"></label><label>Pilih bantuan<select id="learnMode"><option value="explain">Jelaskan dengan bahasa sederhana</option><option value="example">Berikan contoh penerapan</option><option value="quiz">Buat 5 pertanyaan latihan</option></select></label><button class="primary-btn" id="learnBtn">Mulai belajar ✦</button></div><div id="learnResult" class="result-area"></div></section>
 <section class="view" id="view-docs"><div class="section-intro"><span class="overline">BAHAN BELAJAR</span><h2>Dokumen Saya</h2><p>Catat dokumen yang ingin dipakai sebagai referensi. Versi demo belum membaca isi dokumen.</p></div><div class="upload-box"><div class="upload-icon">↥</div><h3>Tambahkan dokumen</h3><p>Pilih file PDF, DOCX, atau TXT untuk membuat daftar referensi lokal.</p><input type="file" id="docInput" accept=".pdf,.doc,.docx,.txt" multiple><label class="file-button" for="docInput">Pilih file</label><small>File hanya dicatat namanya di sesi browser ini; isi file belum dianalisis.</small></div><div id="docList" class="doc-list"></div></section>
 <section class="view" id="view-history"><div class="section-intro"><span class="overline">JEJAK BELAJAR</span><h2>Riwayat Percakapan</h2><p>Riwayat percakapan yang tersimpan pada browser ini.</p></div><div id="historyList" class="history-list"></div><button class="secondary-btn" id="clearHistory">Hapus riwayat</button></section>
-<footer class="footer"><span>© 2026 TUGASIN</span><span>Dibuat untuk mendampingi proses belajar mahasiswa <b>●</b></span></footer>
-</main></div><div class="toast" id="toast"></div><script src="script.js"></script>
-</body></html>
+
+<footer class="footer">
+  <span>© 2026 TUGASIN. All Rights Reserved.</span>
+  <span class="footer-creator">
+    Dikembangkan oleh <strong>Aychel Gusti M.</strong>
+  </span>
+</footer>
+
+</main></div><div class="toast" id="toast"></div>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
