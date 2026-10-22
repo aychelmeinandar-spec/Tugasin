@@ -5,7 +5,48 @@ let conversation=[]; let sending=false;
 function toast(msg){let t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function showView(name){$$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));$$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===name));$('#pageTitle').textContent=titles[name][0];$('#crumb').textContent=titles[name][1];$('#sidebar').classList.remove('open');if(name==='history')renderHistory();if(name==='docs')renderDocs();window.scrollTo(0,0)}
 $$('.nav').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');$('#settingsBtn').onclick=()=>toast('Chat AI memakai backend lokal. API key disimpan di .env.');$('#newTask').onclick=()=>{ conversation=[]; $('#messages').innerHTML='';addMessage('assistant','Hai! Kita mulai dari awal. Ceritakan mata kuliah, instruksi tugas, dan hasil yang diminta dosen.');showView('chat')};
-function addMessage(role,text){let row=document.createElement('div');row.className='message '+role;let av=document.createElement('div');av.className='message-avatar';av.textContent=role==='assistant'?'T':'AS';let bubble=document.createElement('div');bubble.className='bubble';bubble.innerHTML=text;if(role==='user'){row.append(bubble,av)}else{row.append(av,bubble)}$('#messages').append(row);$('#messages').scrollTop=$('#messages').scrollHeight}
+
+function addMessage(role, text) {
+  const row = document.createElement('div');
+  row.className = 'message ' + role;
+
+  const av = document.createElement('div');
+  av.className = 'message-avatar';
+  av.textContent = role === 'assistant' ? 'T' : 'AS';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = role === 'assistant'
+  ? renderMarkdown(text)
+  : esc(text);
+
+  if (role === 'user') {
+    row.append(bubble, av);
+  } else {
+    row.append(av, bubble);
+  }
+
+  $('#messages').append(row);
+  $('#messages').scrollTop = $('#messages').scrollHeight;
+
+  // Render rumus matematika dan kimia pada jawaban AI
+  if (role === 'assistant') {
+    const renderMath = () => {
+      if (window.MathJax?.typesetPromise) {
+        window.MathJax.typesetPromise([bubble]).catch((err) => {
+          console.warn('MathJax gagal merender rumus:', err);
+        });
+      }
+    };
+
+    if (window.MathJax?.startup?.promise) {
+      window.MathJax.startup.promise.then(renderMath);
+    } else if (window.MathJax?.typesetPromise) {
+      renderMath();
+    }
+  }
+}
+
 function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   
 function renderMarkdown(text) {
@@ -108,7 +149,9 @@ async function sendPrompt(q){
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||'Permintaan gagal.');
     const answer=String(data.answer||'AI belum memberikan jawaban.');conversation.push({role:'assistant',content:answer});
-    loading.remove();addMessage('assistant',renderMarkdown(answer));saveChat(q,renderMarkdown(answer));
+    loading.remove();
+      addMessage('assistant', answer);
+      saveChat(q, answer);
   }catch(err){
     conversation.pop();loading.remove();
     const msg=err instanceof TypeError?'Tidak dapat terhubung ke backend. Pastikan server dijalankan dengan perintah npm start dan buka http://localhost:3000.':err.message;
