@@ -6,3 +6,14 @@
 node_modules/
 npm-debug.log*
 .DS_Store
+
+# Python virtual environment
+ai-research/.venv/
+ai-research/venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
