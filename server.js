@@ -15,6 +15,8 @@ app.set('trust proxy', 1);
 
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const PYTHON_API_URL =
+  process.env.PYTHON_API_URL || 'http://127.0.0.1:8000';
 
 const GEMINI_URL =
   `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
@@ -226,6 +228,73 @@ app.post('/api/chat', async (req, res) => {
 
     return res.status(500).json({
       error: 'Terjadi kesalahan pada backend TUGASIN.'
+    });
+  }
+});
+
+
+// ==========================================
+// API PREDIKSI PRIORITAS TUGAS (RANDOM FOREST)
+// ==========================================
+
+app.post('/api/predict-priority', async (req, res) => {
+  const {
+    Jenis_Tugas,
+    Sisa_Hari_Deadline,
+    Tingkat_Kesulitan,
+    Tingkat_Penting,
+    Estimasi_Waktu_Jam
+  } = req.body ?? {};
+
+  // Validasi input
+  if (
+    !Jenis_Tugas ||
+    !Tingkat_Kesulitan ||
+    !Tingkat_Penting ||
+    !Number.isFinite(Number(Sisa_Hari_Deadline)) ||
+    !Number.isFinite(Number(Estimasi_Waktu_Jam))
+  ) {
+    return res.status(400).json({
+      error: 'Data tugas belum lengkap atau tidak valid.'
+    });
+  }
+
+  try {
+    const response = await fetch(
+      `${PYTHON_API_URL}/predict`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          Jenis_Tugas,
+          Sisa_Hari_Deadline: Number(Sisa_Hari_Deadline),
+          Tingkat_Kesulitan,
+          Tingkat_Penting,
+          Estimasi_Waktu_Jam: Number(Estimasi_Waktu_Jam)
+        }),
+        signal: AbortSignal.timeout(15000)
+      }
+    );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      console.error('Python API error:', response.status, result);
+
+      return res.status(502).json({
+        error: result.detail || 'Gagal melakukan prediksi Random Forest.'
+      });
+    }
+
+    return res.json(result);
+
+  } catch (error) {
+    console.error('Random Forest connection error:', error.message);
+
+    return res.status(502).json({
+      error: 'Backend Python tidak dapat dihubungi. Pastikan FastAPI aktif di port 8000.'
     });
   }
 });

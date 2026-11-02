@@ -14,6 +14,7 @@
   <button class="nav" data-view="learn"><span>✳</span> Belajar & Kuis</button>
   <button class="nav" data-view="docs"><span>▤</span> Dokumen Saya</button>
   <button class="nav" data-view="history"><span>◷</span> Riwayat</button>
+  <button class="nav" data-view="priority"><span>◎</span> Prediksi Prioritas AI</button>
   <div class="sidebar-bottom"><div class="mini-avatar">AS</div><div><b>Ruang Mahasiswa</b><small>Mode demo lokal</small></div><span class="status-dot"></span></div>
 </aside>
 <main class="main">
@@ -28,6 +29,58 @@
 <section class="view" id="view-learn"><div class="section-intro"><span class="overline">BELAJAR AKTIF</span><h2>Belajar & Kuis</h2><p>Minta penjelasan konsep, contoh sederhana, atau buat kuis dari topik yang sedang dipelajari.</p></div><div class="form-card"><label>Topik yang ingin dipelajari<input id="learnTopic" placeholder="Contoh: algoritma KNN, basis data, jaringan komputer"></label><label>Pilih bantuan<select id="learnMode"><option value="explain">Jelaskan dengan bahasa sederhana</option><option value="example">Berikan contoh penerapan</option><option value="quiz">Buat 5 pertanyaan latihan</option></select></label><button class="primary-btn" id="learnBtn">Mulai belajar ✦</button></div><div id="learnResult" class="result-area"></div></section>
 <section class="view" id="view-docs"><div class="section-intro"><span class="overline">BAHAN BELAJAR</span><h2>Dokumen Saya</h2><p>Catat dokumen yang ingin dipakai sebagai referensi. Versi demo belum membaca isi dokumen.</p></div><div class="upload-box"><div class="upload-icon">↥</div><h3>Tambahkan dokumen</h3><p>Pilih file PDF, DOCX, atau TXT untuk membuat daftar referensi lokal.</p><input type="file" id="docInput" accept=".pdf,.doc,.docx,.txt" multiple><label class="file-button" for="docInput">Pilih file</label><small>File hanya dicatat namanya di sesi browser ini; isi file belum dianalisis.</small></div><div id="docList" class="doc-list"></div></section>
 <section class="view" id="view-history"><div class="section-intro"><span class="overline">JEJAK BELAJAR</span><h2>Riwayat Percakapan</h2><p>Riwayat percakapan yang tersimpan pada browser ini.</p></div><div id="historyList" class="history-list"></div><button class="secondary-btn" id="clearHistory">Hapus riwayat</button></section>
+
+
+<section class="view" id="view-priority">
+  <div class="section-intro">
+    <span class="overline">MACHINE LEARNING · RANDOM FOREST</span>
+    <h2>Prediksi Prioritas Tugas</h2>
+    <p>Isi karakteristik tugas untuk mendapatkan rekomendasi prioritas dari model Random Forest.</p>
+  </div>
+  <div class="form-card">
+    <form id="priorityForm">
+      <label>Jenis tugas
+        <select id="priorityJenis" required>
+          <option value="">Pilih jenis tugas</option>
+          <option value="Kuis">Kuis</option>
+          <option value="Presentasi">Presentasi</option>
+          <option value="Makalah">Makalah</option>
+          <option value="Pemrograman">Pemrograman</option>
+          <option value="Rangkuman">Rangkuman</option>
+          <option value="Laporan Praktikum">Laporan Praktikum</option>
+        </select>
+      </label>
+      <div class="form-row">
+        <label>Sisa hari menuju deadline
+          <input id="priorityDeadline" type="number" min="0" step="1" placeholder="Contoh: 3" required>
+        </label>
+        <label>Estimasi waktu pengerjaan (jam)
+          <input id="priorityHours" type="number" min="1" step="1" placeholder="Contoh: 5" required>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Tingkat kesulitan
+          <select id="priorityDifficulty" required>
+            <option value="">Pilih tingkat kesulitan</option>
+            <option value="Rendah">Rendah</option>
+            <option value="Sedang">Sedang</option>
+            <option value="Tinggi">Tinggi</option>
+          </select>
+        </label>
+        <label>Tingkat kepentingan
+          <select id="priorityImportance" required>
+            <option value="">Pilih tingkat kepentingan</option>
+            <option value="Rendah">Rendah</option>
+            <option value="Sedang">Sedang</option>
+            <option value="Tinggi">Tinggi</option>
+          </select>
+        </label>
+      </div>
+      <button class="primary-btn" id="prioritySubmit" type="submit">◎ Prediksi Prioritas</button>
+    </form>
+  </div>
+  <div id="priorityResult" class="result-area" aria-live="polite"></div>
+</section>
 
 <footer class="footer">
   <span>© 2026 TUGASIN. All Rights Reserved.</span>
